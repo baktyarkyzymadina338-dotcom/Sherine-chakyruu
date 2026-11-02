@@ -1,0 +1,90 @@
+
+const envelopeScreen =
+  document.getElementById("envelopeScreen");
+
+const invitation =
+  document.getElementById("invitation");
+
+const envelope =
+  document.getElementById("envelope");
+
+const music =
+  document.getElementById("music");
+
+const musicBtn =
+  document.getElementById("musicBtn");
+
+const musicBtn2 =
+  document.getElementById("musicBtn2");
+
+let musicPlaying = false;
+
+// Конвертти ачуу
+envelope.addEventListener("click", async () => {
+
+  const flap = envelope.querySelector(".flap");
+  const seal = envelope.querySelector(".seal");
+  const letter = envelope.querySelector(".letter");
+
+  flap.style.transform = "rotateX(180deg)";
+  seal.style.opacity = "0";
+  letter.style.transform = "translateY(-20%)";
+
+  // Музыка башталат
+  try {
+    await music.play();
+    musicPlaying = true;
+    updateMusicButtons();
+  } catch (error) {
+    console.log("Музыка башталбай калды");
+  }
+
+  setTimeout(() => {
+    envelopeScreen.classList.add("hidden");
+    invitation.classList.remove("hidden");
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+
+  }, 900);
+
+});
+
+// Музыканы күйгүзүү / өчүрүү
+async function toggleMusic() {
+
+  if (musicPlaying) {
+
+    music.pause();
+    musicPlaying = false;
+
+  } else {
+
+    try {
+      await music.play();
+      musicPlaying = true;
+    } catch (error) {
+      console.log("Музыка ойнотулбай жатат");
+    }
+
+  }
+
+  updateMusicButtons();
+}
+
+// Музыка кнопкаларын жаңылоо
+function updateMusicButtons() {
+
+  musicBtn.textContent =
+    musicPlaying ? "♫" : "♪";
+
+  musicBtn2.textContent =
+    musicPlaying ? "♫" : "♪";
+
+}
+
+musicBtn.addEventListener("click", toggleMusic);
+
+musicBtn2.addEventListener("click", toggleMusic);
